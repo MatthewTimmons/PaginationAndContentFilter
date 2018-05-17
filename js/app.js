@@ -1,43 +1,48 @@
-var students = $(".student-item");
+const allStudents = $('.student-item');
+let searchResults = [];
 
-// Create function to hide all students
-function hideAll() {
-	students.each(function () {
+// Create a function to hide all students
+function hideAllStudents() {
+	allStudents.each(function () {
 		this.style.display = 'none';
 	});
 }
 
 // Create a function to display only the ten I want at any given time
 function printPage(pageNumber) {
-	hideAll();
-	var init = pageNumber*10;
-	var start = init - 10;
+	hideAllStudents();
+	let init = pageNumber * 10;
+	let start = init - 10;
 
-	// Show students
-	for (var i=start; i < init; i++) {
-		students[i].style.display = '';
+	// Show 10 students 
+	for (let i = start; i < init; i++) {
+		searchResults[i].style.display = '';
 	}
 }
 
-// Create a function to add the correct amount of buttons to the page
-function paginate(students) {
-	var pages = Math.ceil((students.length)/10);
-	var paginationHTML = '<div class="pagination"><ul id="buttons"></ul></div>';
-	var html = '';
-	
-	for (var i = 0; i < pages; i++) {
-		html += generateButton(i+1);
+// Create a function to add the correct amount of functioning buttons to the page
+function paginate(array) {
+	let numberOfPages = Math.ceil((array.length)/10);
+	let paginationHTML = '<div class="pagination"><ul id="buttons"></ul></div>';
+	let html = '';
+	searchResults = array;
+
+	// Generate all page buttons
+	for (let i=0; i < numberOfPages; i++) {
+		html += generateButton((i+1));
 	}
+
+	// Add all html to index.html
 	$('.page').append(paginationHTML);
 	$('#buttons').append(html);
 }
 
-function generateButton (input) {
-	return `<li><a href="javascript:printPage(${input})">${input}</a></li>`;
+//Create a function to generate the html that will hold the button element
+function generateButton (number, list) {
+	return `<li><a href="javascript:printPage(${number})">${number}</a></li>`;
 }
 
-// Start display at Page 1
+// Initialize page by showing first 10 students
+searchResults = allStudents;
 printPage(1);
-
-// Paginate all students
-paginate(students);
+paginate(searchResults);

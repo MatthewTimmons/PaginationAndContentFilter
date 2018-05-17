@@ -117,3 +117,9 @@ body{
       background-color: #4ba6c3;
       color: #fff;
     }
+
+/* Empty class for when no search results are returned */
+
+.empty:after {
+  content: 'No results';
+}

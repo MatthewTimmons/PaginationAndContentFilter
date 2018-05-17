@@ -1,27 +1,45 @@
-var searchBarHTML = '';
+let searchBarHTML = '';
 
-
-
-searchBarHTML += '<div class="student-search">';
-searchBarHTML += '<input id="search-terms" type="text" placeholder="Search for students...">';
-searchBarHTML += '<button type="submit">Submit</button></div>';
-
+// Dynamically insert HTML for the search bar
+searchBarHTML += '<div class="student-search"><input id="search-terms" type="text" placeholder="Search for students..."><button type="submit">Submit</button></div>';
 $('.page-header').append(searchBarHTML);
 
-var searchTerms = $('#search-terms').val();
+// Create a function that searches all student names and emails
+function search(input, allStudents) {
+	searchResults = [];
 
+	// Pushes all search results to the searchResults array
+	for (var i=0; i < allStudents.length; i++) {
+		if ($('h3')[i].innerHTML.includes(input) || $('.email')[i].innerHTML.includes(input)) {
+			searchResults.push(allStudents[i]);
+		}
+	}
 
-function search(input, students) {
-			console.log(searchTerms);
-	for (var i=0; i < students.length; i++) {
-		console.log(document.getElementsByTagName('h3')[i].innerHTML.includes(searchTerms));
+	// If search results exist, displays those results and adds page buttons
+	if (searchResults.length != 0) {
 
-		// if (students[i].getElementsByTagName('h3')[0].innerHTML) {
-		// 	students[i].style.display = '';
-		// }
+		// Clear buttons and then display search results
+		$('#buttons').html('');
+		$('.student-list').removeClass('empty');
+		paginate(searchResults);
+		printPage(1);
+
+	// If no search results exist, displays message, "No results"		
+	} else {
+		hideAllStudents();
+		$('#buttons').html('');
+		$('.student-list').addClass('empty');
 	}
 }
 
+// Run search() whenever Submit button is clicked
 $('button').on('click', () => {
-	search(searchTerms, students);
-})
+	let searchTerms = $('#search-terms').val();
+	search(searchTerms, allStudents);
+});
+
+// Run search() as user types in search bar
+$('input').keyup(function(){
+	let searchTerms = $('#search-terms').val();
+	search(searchTerms, allStudents);
+});
