@@ -15,14 +15,14 @@ function search(input, allStudents) {
 		}
 	}
 
-	// If search results exist, displays those results and adds page buttons
+	// If search results exist, display those results and add page buttons
 	if (searchResults.length != 0) {
 
 		// Clear buttons and then display search results
 		$('#buttons').html('');
 		$('.student-list').removeClass('empty');
 		paginate(searchResults);
-		printPage(1);
+		printPage(1, searchResults);
 
 	// If no search results exist, displays message, "No results"		
 	} else {

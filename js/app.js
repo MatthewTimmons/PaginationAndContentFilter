@@ -1,5 +1,6 @@
 const allStudents = $('.student-item');
 let searchResults = [];
+let lastButton;
 
 // Create a function to hide all students
 function hideAllStudents() {
@@ -8,15 +9,30 @@ function hideAllStudents() {
 	});
 }
 
+//Create a function to generate the html that will hold the button element
+function generateButton (number, list) {
+	return `<li><a>${number}</a></li>`;
+}
+
 // Create a function to display only the ten I want at any given time
-function printPage(pageNumber) {
+function printPage(pageNumber, array) {
 	hideAllStudents();
 	let init = pageNumber * 10;
 	let start = init - 10;
 
-	// Show 10 students 
-	for (let i = start; i < init; i++) {
-		searchResults[i].style.display = '';
+	// If user clicks last button, present only the remaining students
+	if (pageNumber == lastButton) {
+		let remainder = (array.length % 10) + start; 
+		for (let i = start; i < remainder; i++) {
+			searchResults[i].style.display = '';
+		}
+
+	// Print 10 students, as long as the last button is not clicked
+	} else {
+		// Show 10 students 
+		for (let i = start; i < init; i++) {
+			searchResults[i].style.display = '';
+		}
 	}
 }
 
@@ -35,14 +51,18 @@ function paginate(array) {
 	// Add all html to index.html
 	$('.page').append(paginationHTML);
 	$('#buttons').append(html);
+	lastButton = $('#buttons li').length;
+
+	// Print page when button is clicked
+	$('li').on('click', () => {
+		let num = $(event.target).text();
+		printPage(num, searchResults);
+	});
 }
 
-//Create a function to generate the html that will hold the button element
-function generateButton (number, list) {
-	return `<li><a href="javascript:printPage(${number})">${number}</a></li>`;
-}
 
 // Initialize page by showing first 10 students
 searchResults = allStudents;
-printPage(1);
+printPage(1, searchResults);
 paginate(searchResults);
+
